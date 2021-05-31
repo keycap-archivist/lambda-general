@@ -1,0 +1,23 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  name      String     @db.VarChar(255)
+  discordId String     @db.VarChar(255)
+  wishlists Wishlist[]
+}
+
+model Wishlist {
+  id      Int    @id @default(autoincrement())
+  userId  Int    @unique
+  user    User   @relation(fields: [userId], references: [id])
+  name    String @db.VarChar(255)
+  content Json   @db.Json
+}
