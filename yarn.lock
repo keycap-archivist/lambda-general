@@ -1103,7 +1103,7 @@
     "@typescript-eslint/types" "4.22.0"
     eslint-visitor-keys "^2.0.0"
 
-"@vercel/ncc@^0.28.6":
+"@vercel/ncc@0.28.6":
   version "0.28.6"
   resolved "https://registry.yarnpkg.com/@vercel/ncc/-/ncc-0.28.6.tgz#073c0ce8e0269210c0a9f180fb0bf949eecc20e0"
   integrity sha512-t4BoSSuyK8BZaUE0gV18V6bkFs4st7baumtFGa50dv1tMu2GDBEBF8sUZaKBdKiL6DzJ2D2+XVCwYWWDcQOYdQ==
@@ -1113,14 +1113,14 @@ abbrev@1:
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
   integrity sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==
 
-abstract-cache-redis@^2.0.0:
+abstract-cache-redis@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/abstract-cache-redis/-/abstract-cache-redis-2.0.0.tgz#ae7e215f0b7dd92cd266797f2702a52be6d3d37f"
   integrity sha512-RlEniQUnIFCnh7U9S4kdDM7/uhpkl8KH5EdFplH7ntwze4voH8VhvaLXwc0mKQqL/daO9X6qULh8bWpgNrUtGg==
   dependencies:
     ioredis "^4.26.0"
 
-abstract-cache@^1.0.1:
+abstract-cache@1.0.1, abstract-cache@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/abstract-cache/-/abstract-cache-1.0.1.tgz#136151becf5c32e0ea27f78728d073d8fe07932a"
   integrity sha512-EfUeMhRUbG5bVVbrSY/ogLlFXoyfMAPxMlSP7wrEqH53d+59r2foVy9a5KjmprLKFLOfPQCNKEfpBN/nQ76chw==
@@ -2100,7 +2100,7 @@ fast-xml-parser@3.19.0:
   resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-3.19.0.tgz#cb637ec3f3999f51406dd8ff0e6fc4d83e520d01"
   integrity sha512-4pXwmBplsCPv8FOY1WRakF970TjNGnGnfbOnLqjlYvMiF1SR3yOHyxMR/YCXpPTOspNF5gwudqktIP4VsWkvBg==
 
-fastify-caching@^6.1.0:
+fastify-caching@6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/fastify-caching/-/fastify-caching-6.1.0.tgz#0665577cf0c169d57fd9ed07040e2b051d1232b2"
   integrity sha512-xhzjpI21qpHqoOKlUXlqpPSWm7UBTTgWrXxjfFpmxCbNBtN+JiQtzuXuSF8dUj5iig2ztRaD9+sD9uyPmNkHOw==
@@ -2109,7 +2109,7 @@ fastify-caching@^6.1.0:
     fastify-plugin "^3.0.0"
     uid-safe "^2.1.5"
 
-fastify-cookie@^5.3.1:
+fastify-cookie@5.3.1:
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/fastify-cookie/-/fastify-cookie-5.3.1.tgz#97b17f3f297b06ffc8e27fe7a0398aefa9df74f0"
   integrity sha512-ubiC5ydvgqaXOydeg3G+SFEiTJtsyNPde6ForXi+UG66aDbsHlWNLJTQZg4BopXv+MJ0SzlShGVCWv26mgAwpw==
@@ -2159,7 +2159,7 @@ fastify-plugin@^3.0.0:
   resolved "https://registry.yarnpkg.com/fastify-plugin/-/fastify-plugin-3.0.0.tgz#cf1b8c8098e3b5a7c8c30e6aeb06903370c054ca"
   integrity sha512-ZdCvKEEd92DNLps5n0v231Bha8bkz1DjnPP/aEz37rz/q42Z5JVLmgnqR4DYuNn3NXAO3IDCPyRvgvxtJ4Ym4w==
 
-fastify-server-session@^4.0.0:
+fastify-server-session@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/fastify-server-session/-/fastify-server-session-4.0.0.tgz#773b436eef989ad1793703916954f81da638f6d3"
   integrity sha512-fqBSy+ndRLX2GLlyY2LkoDCX5GGOaVcdgM/mHSDolF4RF25raxIOwCDVkDSEF/sCjNcjq1wtdhKdnTMbK2Mjmg==
@@ -3546,10 +3546,10 @@ picomatch@^2.0.4, picomatch@^2.2.1, picomatch@^2.2.3:
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.0.tgz#f1f061de8f6a4bf022892e2d128234fb98302972"
   integrity sha512-lY1Q/PiJGC2zOv/z391WOTD+Z02bCgsFfvxoXXf6h7kv9o+WmsmzYqrAwY63sNgOxE4xEdq0WyUnXfKeBrSvYw==
 
-pino-pretty@^5.0.1:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/pino-pretty/-/pino-pretty-5.0.2.tgz#89b0c21d4fbf7cb7bf005268b4d6c6230a9a833f"
-  integrity sha512-nOoRoQXYZgURqtSwsM+FLFHBTrZRjuMKfQhELMeewjHnM8xdNhlkqLEGxBpcSCkFlfjHX3jdav9TQzQljjSL9w==
+pino-pretty@5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/pino-pretty/-/pino-pretty-5.0.1.tgz#2cbdf1d743d97df3f0a9dd41cf440274ec770082"
+  integrity sha512-sm218/N1P6w6YWoebpME1xsT4tm+yNQWDBx3JzlH0mLYEt3uICEZqntAIw3LqYjlbX4mavo6kZV0cfGsZNO2tQ==
   dependencies:
     "@hapi/bourne" "^2.0.0"
     "@types/node" "^15.3.0"
