@@ -1,26 +1,35 @@
 import fastify from 'fastify';
 import fastifyCORS from 'fastify-cors';
 import fastifyEnv from 'fastify-env';
-import fastifySession from '@mgcrea/fastify-session';
-import RedisStore from '@mgcrea/fastify-session-redis-store';
+import fastifyCaching from 'fastify-caching';
+import fastifySession from 'fastify-server-session';
 import fastifyCookie from 'fastify-cookie';
-import Redis from 'ioredis';
+import IORedis from 'ioredis';
 import pino from 'pino';
 import { PrismaClient } from '@prisma/client';
+import AbCache from 'abstract-cache';
 
+// routes
 import authRoute from './routes/auth';
+import miscRoutes from './routes/misc';
+import authenticatedRoutes from './authentified-routes/index';
 
-import type { FastifyRequest, FastifyReply } from 'fastify';
+import type { OAuth2Namespace } from 'fastify-oauth2';
 
 const GIT_REV = process.env.GIT_REVISION;
 const logger = pino().child({ revision: GIT_REV });
 const app = fastify({ logger, exposeHeadRoutes: true });
-const redisClient = new Redis({
+const redisClient = new IORedis({
   host: process.env.REDIS_HOST,
   port: process.env.REDIS_PORT
 });
 const prisma = new PrismaClient();
-
+const abache = AbCache({
+  driver: {
+    name: 'abstract-cache-redis',
+    options: { client: redisClient }
+  }
+});
 app.decorate('prisma', prisma);
 
 app
@@ -41,7 +50,6 @@ app
         GIT_REVISION: { type: 'string' },
         DATABASE_URL: { type: 'string' },
         BASE_URL: { type: 'string' },
-        PORT: { type: 'integer', default: 3000 },
         DISCORD_CLIENT_ID: { type: 'string' },
         DISCORD_SECRET: { type: 'string' },
         DISCORD_PERMISSION: { type: 'string' }
@@ -50,25 +58,49 @@ app
     dotenv: true
   })
   .register(fastifyCookie)
+  .register(fastifyCaching, {
+    expiresIn: 50,
+    cache: abache,
+    cacheSegment: 'fastifyCache'
+  })
   .register(fastifySession, {
-    cookieName: 'KA-SESSION',
-    secret: process.env.COOKIE_KEY,
-    cookie: { path: '/' },
-    store: new RedisStore({ client: redisClient })
+    sessionCookieName: 'KA-SESSION',
+    secretKey: process.env.COOKIE_KEY,
+    sessionMaxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    cookie: { path: '/', httpOnly: true, sameSite: process.env.NODE_ENV === 'production' }
   })
   .register(fastifyCORS, { origin: true, methods: 'GET,POST' });
 
+// Non authenticated routes
 app.register(authRoute, { prefix: 'auth' });
+app.register(miscRoutes);
 
-app.get('/info', async function (req: FastifyRequest, reply: FastifyReply) {
-  req.session.set('foo', 'bar');
-  return reply.send({ keycap: 'archivist', app: 'general', revision: app['config'].GIT_REVISION });
-});
+// authenticated routes
+app.register(authenticatedRoutes);
 
 if (require.main === module) {
-  app.listen(3000, '0.0.0.0', (err) => {
+  app.listen(3001, '0.0.0.0', (err) => {
     if (err) console.error(err);
   });
 }
 
 export default app;
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    prisma: PrismaClient;
+    discordOAuth2: OAuth2Namespace;
+    config: {
+      GIT_REVISION: string;
+      DISCORD_CLIENT_ID: string;
+      DISCORD_SECRET: string;
+      BASE_URL: string;
+    };
+  }
+  interface FastifyRequest {
+    session: {
+      discordId?: string;
+      dbId?: number;
+    };
+  }
+}
