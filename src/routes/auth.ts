@@ -49,9 +49,7 @@ export default function auth(fastify: FastifyInstance, opts, next): void {
 
   fastify.get('/logout', async function (req: FastifyRequest, reply: FastifyReply) {
     req.session = {};
-    return reply
-      .code(200)
-      .send('ok');
+    return reply.code(200).send('ok');
   });
 
   next();
