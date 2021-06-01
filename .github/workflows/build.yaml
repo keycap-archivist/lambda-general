@@ -28,6 +28,8 @@ jobs:
         run: yarn lint
       - name: build
         run: yarn build
+      - name: package
+        run: yarn package
       # - name: AWS Lambda Deploy
       #   if: github.ref == 'refs/heads/master'
       #   uses: appleboy/lambda-action@master
