@@ -25,6 +25,7 @@ const redisClient = new IORedis({
 });
 const prisma = new PrismaClient();
 const abache = AbCache({
+  useAwait: false,
   driver: {
     name: 'abstract-cache-redis',
     options: { client: redisClient }
@@ -43,7 +44,8 @@ app
         'GIT_REVISION',
         'COOKIE_KEY',
         'REDIS_HOST',
-        'REDIS_PORT'
+        'REDIS_PORT',
+        'REDIRECT_LOGIN_URL'
       ],
       properties: {
         COOKIE_KEY: { type: 'string' },
@@ -52,7 +54,8 @@ app
         BASE_URL: { type: 'string' },
         DISCORD_CLIENT_ID: { type: 'string' },
         DISCORD_SECRET: { type: 'string' },
-        DISCORD_PERMISSION: { type: 'string' }
+        DISCORD_PERMISSION: { type: 'string' },
+        REDIRECT_LOGIN_URL: { type: 'string' }
       }
     },
     dotenv: true
@@ -67,9 +70,9 @@ app
     sessionCookieName: 'KA-SESSION',
     secretKey: process.env.COOKIE_KEY,
     sessionMaxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-    cookie: { path: '/', httpOnly: true, sameSite: process.env.NODE_ENV === 'production' }
+    cookie: { path: '/', httpOnly: true, sameSite: 'None', secure: true }
   })
-  .register(fastifyCORS, { origin: true, methods: 'GET,POST' });
+  .register(fastifyCORS, { origin: true, methods: 'GET,POST', credentials: true });
 
 // Non authenticated routes
 app.register(authRoute, { prefix: 'auth' });
@@ -95,12 +98,16 @@ declare module 'fastify' {
       DISCORD_CLIENT_ID: string;
       DISCORD_SECRET: string;
       BASE_URL: string;
+      REDIRECT_LOGIN_URL: string;
     };
   }
   interface FastifyRequest {
     session: {
+      name?: string;
+      avatar?: string;
       discordId?: string;
       dbId?: number;
+      touched?: boolean;
     };
   }
 }

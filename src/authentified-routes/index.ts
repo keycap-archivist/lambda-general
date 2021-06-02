@@ -9,7 +9,7 @@ export default function authenticatedRoutes(fastify: FastifyInstance, opts, next
       return next(new Error('Unauthorized'));
     }
     // equivalent of touch()
-    req.session.discordId = req.session.discordId;
+    req.session.touched = true;
     next();
   });
 

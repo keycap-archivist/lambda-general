@@ -44,7 +44,20 @@ export default function auth(fastify: FastifyInstance, opts, next): void {
       });
     }
     request.session.discordId = profile.id;
-    return reply.send('ok');
+    request.session.name = profile.username;
+    request.session.avatar = profile.avatar;
+    return reply.redirect(fastify.config.REDIRECT_LOGIN_URL);
+  });
+
+  fastify.get('/current-session', async function (req: FastifyRequest, reply: FastifyReply) {
+    if (!req.session.discordId) {
+      return reply.code(403).send('noop');
+    }
+    req.session.touched = true;
+    return reply.code(200).send({
+      name: req.session.name,
+      avatar: `https://cdn.discordapp.com/avatar/${req.session.discordId}/${req.session.avatar}.png`
+    });
   });
 
   fastify.get('/logout', async function (req: FastifyRequest, reply: FastifyReply) {
