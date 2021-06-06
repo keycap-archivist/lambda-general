@@ -30,7 +30,7 @@ if (process.env.NODE_ENV !== 'production') {
     accessKeyId: 'AKID',
     secretAccessKey: 'SECRET',
     region: 'us-east-2',
-    endpoint: 'http://localhost:8000'
+    endpoint: 'http://localhost:8500'
   });
 } else {
   ddb = new dynamoose.aws.sdk.DynamoDB();
