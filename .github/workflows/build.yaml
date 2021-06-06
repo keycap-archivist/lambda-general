@@ -33,7 +33,7 @@ jobs:
       - name: zip
         uses: montudor/action-zip@v0.1.0
         with:
-          args: zip -qq -r ./package.zip ./package
+          args: zip -qq -r -D ./package.zip ./package/
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
