@@ -14,10 +14,11 @@ class DynamoCache {
     if (!r) {
       return {};
     }
+    const now = new Date(Date.now()).getTime();
     return {
       item: r.data,
       stored: r.updatedAt,
-      ttl: r.ttl
+      ttl: (r.ttl as number) - now
     };
   }
   async has(key: string) {
@@ -25,7 +26,7 @@ class DynamoCache {
     return !!r;
   }
   async set(key: string, value: Record<string, unknown>, ttl: number) {
-    await this.model.update({ key }, { data: { ...value }, ttl: Date.now() + ttl });
+    await this.model.update({ key }, { data: { ...value }, ttl: new Date(Date.now() + ttl) });
   }
 }
 
