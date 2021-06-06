@@ -23,12 +23,18 @@ const GIT_REV = process.env.GIT_REVISION;
 const logger = pino().child({ revision: GIT_REV });
 const app = fastify({ logger, exposeHeadRoutes: true });
 const TTL_SESSION = 1000 * 60 * 60 * 24 * 7; // 1 week
-const ddb = new dynamoose.aws.sdk.DynamoDB({
-  accessKeyId: 'AKID',
-  secretAccessKey: 'SECRET',
-  region: 'us-east-2',
-  endpoint: 'http://localhost:8000'
-});
+
+let ddb;
+if (process.env.NODE_ENV !== 'production') {
+  ddb = new dynamoose.aws.sdk.DynamoDB({
+    accessKeyId: 'AKID',
+    secretAccessKey: 'SECRET',
+    region: 'us-east-2',
+    endpoint: 'http://localhost:8000'
+  });
+} else {
+  ddb = new dynamoose.aws.sdk.DynamoDB();
+}
 
 // Set DynamoDB instance to the Dynamoose DDB instance
 dynamoose.aws.ddb.set(ddb);
@@ -52,7 +58,6 @@ app
         BASE_URL: { type: 'string' },
         DISCORD_CLIENT_ID: { type: 'string' },
         DISCORD_SECRET: { type: 'string' },
-        DISCORD_PERMISSION: { type: 'string' },
         REDIRECT_LOGIN_URL: { type: 'string' }
       }
     },
@@ -68,8 +73,7 @@ app
     sessionCookieName: 'KA-SESSION',
     secretKey: process.env.COOKIE_KEY,
     sessionMaxAge: TTL_SESSION,
-    cookie: { path: '/', httpOnly: true }
-    // cookie: { path: '/', httpOnly: true, sameSite: 'None', secure: true }
+    cookie: { path: '/', httpOnly: true, sameSite: 'None', secure: true }
   })
   .register(fastifyCORS, { origin: true, methods: 'GET,POST,DELETE', credentials: true });
 
