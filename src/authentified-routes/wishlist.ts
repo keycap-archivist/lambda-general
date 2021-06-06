@@ -1,15 +1,33 @@
+import { v4 as uuidv4 } from 'uuid';
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 
-export default function misc(fastify: FastifyInstance, opts, next): void {
+export default function wishlist(fastify: FastifyInstance, opts, next): void {
+  // get users wishlist
   fastify.get('/', async function (req: FastifyRequest, reply: FastifyReply) {
-    const ws = await fastify.prisma.wishlist.findMany({
-      where: {
-        user: { discordId: req.session.discordId }
-      }
-    });
+    const ws = await fastify.dynamooseModels.wishlists.scan({ discordId: { eq: `${req.session.discordId}` } }).exec();
     return reply.send(ws);
   });
 
+  fastify.route({
+    method: 'GET',
+    url: '/:id',
+    schema: {
+      params: {
+        required: ['id'],
+        properties: {
+          id: { type: 'string' }
+        }
+      }
+    },
+    handler: async function (req: FastifyRequest<{ Params: { id: number } }>, reply: FastifyReply) {
+      const ws = await fastify.dynamooseModels.wishlists
+        .scan({ id: { eq: `${req.params.id}` }, discordId: { eq: `${req.session.discordId}` } })
+        .exec();
+      return reply.send(ws);
+    }
+  });
+
+  // creates a wishlist
   fastify.route({
     url: '/',
     method: 'POST',
@@ -27,18 +45,25 @@ export default function misc(fastify: FastifyInstance, opts, next): void {
       req: FastifyRequest<{ Body: { wishlist: any; name: string; id: number } }>,
       reply: FastifyReply
     ) {
-      // creates a wishlist
-      await fastify.prisma.wishlist.create({
-        data: {
-          userId: req.session.dbId,
-          name: req.body.name,
-          content: req.body.wishlist
-        }
+      const s = await fastify.dynamooseModels.wishlists
+        .scan({ discordId: { eq: `${req.session.discordId}` } })
+        .count()
+        .exec();
+      if (s >= 10) {
+        return reply.status(400).send({ msg: 'You cant have more than 10 wishlists' });
+      }
+      await fastify.dynamooseModels.wishlists.create({
+        id: uuidv4(),
+        discordId: req.session.discordId,
+        name: req.body.name,
+        content: req.body.wishlist,
+        lastUpdate: new Date().getUTCDate()
       });
-      return reply.send('OK');
+      return reply.send({ msg: 'OK' });
     }
   });
 
+  // update a wishlist
   fastify.route({
     url: '/:id',
     method: 'POST',
@@ -62,28 +87,29 @@ export default function misc(fastify: FastifyInstance, opts, next): void {
       req: FastifyRequest<{ Params: { id: number }; Body: { wishlist: any; name: string; id: number } }>,
       reply: FastifyReply
     ) {
-      const s = await fastify.prisma.wishlist.count({
-        where: {
-          id: req.params.id,
-          userId: req.session.dbId
-        }
-      });
+      const s = await fastify.dynamooseModels.wishlists
+        .scan({ discordId: { eq: req.session.discordId }, id: { eq: req.params.id } })
+        .count()
+        .exec();
+
       if (!s) {
-        return reply.status(404).send('Wishlist not found');
+        return reply.status(404).send({ msg: 'Wishlist not found' });
       }
-      await fastify.prisma.wishlist.update({
+      await fastify.dynamooseModels.wishlists.update({
         where: {
           id: req.body.id
         },
         data: {
           name: req.body.name,
-          content: req.body.wishlist
+          content: req.body.wishlist,
+          lastUpdate: new Date().getUTCDate()
         }
       });
-      return reply.send('OK');
+      return reply.send({ msg: 'OK' });
     }
   });
 
+  // delete a wishlist
   fastify.route({
     url: '/:id',
     method: 'DELETE',
@@ -96,25 +122,17 @@ export default function misc(fastify: FastifyInstance, opts, next): void {
       }
     },
     handler: async function (req: FastifyRequest<{ Params: { id: number } }>, reply: FastifyReply) {
-      const s = await fastify.prisma.wishlist.count({
-        where: {
-          id: req.params.id,
-          userId: req.session.dbId
-        }
-      });
+      const s = await fastify.dynamooseModels.wishlists
+        .scan({ discordId: { eq: req.session.discordId }, id: { eq: req.params.id } })
+        .count()
+        .exec();
       if (!s) {
-        return reply.status(404).send('Wishlist not found');
+        return reply.status(404).send({ msg: 'Wishlist not found' });
       }
-      await fastify.prisma.wishlist.deleteMany({
-        where: {
-          id: (req.params as { id: number }).id,
-          AND: {
-            user: { discordId: req.session.discordId }
-          }
-        }
-      });
-      return reply.send('OK');
+      await fastify.dynamooseModels.wishlists.delete({ id: req.params.id });
+      return reply.send({ msg: 'OK' });
     }
   });
+
   next();
 }

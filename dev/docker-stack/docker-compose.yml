@@ -1,47 +1,50 @@
 version: '3.5'
 
 services:
-  redis:
-    image: 'bitnami/redis:latest'
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
+  dynamodb:
+    image: amazon/dynamodb-local:latest
     ports:
-      - "6379:6379"
+      - "8000:8000"
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
     networks:
-      - postgres
-  postgres:
-    container_name: db
-    image: postgres:12
-    environment:
-      POSTGRES_USER: keycapArchivist
-      POSTGRES_PASSWORD: DizIzSecret
-      PGDATA: /data/postgres
-    volumes:
-       - postgres:/data/postgres
-    ports:
-      - "5432:5432"
-    networks:
-      - postgres
-    restart: unless-stopped
+      - infra
+  # redis:
+  #   image: 'bitnami/redis:latest'
+  #   environment:
+  #     - ALLOW_EMPTY_PASSWORD=yes
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - postgres
+  # postgres:
+  #   container_name: db
+  #   image: postgres:12
+  #   environment:
+  #     POSTGRES_USER: keycapArchivist
+  #     POSTGRES_PASSWORD: DizIzSecret
+  #     PGDATA: /data/postgres
+  #   volumes:
+  #      - postgres:/data/postgres
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     - postgres
+  #   restart: unless-stopped
 
-  pgadmin:
-    container_name: pgadmin_container
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-    volumes:
-       - pgadmin:/root/.pgadmin
-    ports:
-      - "${PGADMIN_PORT:-5050}:80"
-    networks:
-      - postgres
-    restart: unless-stopped
+  # pgadmin:
+  #   container_name: pgadmin_container
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+  #   volumes:
+  #      - pgadmin:/root/.pgadmin
+  #   ports:
+  #     - "${PGADMIN_PORT:-5050}:80"
+  #   networks:
+  #     - postgres
+  #   restart: unless-stopped
 
 networks:
-  postgres:
+  infra:
     driver: bridge
-
-volumes:
-    postgres:
-    pgadmin:

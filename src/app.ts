@@ -4,10 +4,13 @@ import fastifyEnv from 'fastify-env';
 import fastifyCaching from 'fastify-caching';
 import fastifySession from 'fastify-server-session';
 import fastifyCookie from 'fastify-cookie';
-import IORedis from 'ioredis';
 import pino from 'pino';
-import { PrismaClient } from '@prisma/client';
+// import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import AbCache from 'abstract-cache';
+import * as dynamoose from 'dynamoose';
+
+import dynamoCache from './dynamo-cache';
+import { models } from './internal/dynamo';
 
 // routes
 import authRoute from './routes/auth';
@@ -19,38 +22,33 @@ import type { OAuth2Namespace } from 'fastify-oauth2';
 const GIT_REV = process.env.GIT_REVISION;
 const logger = pino().child({ revision: GIT_REV });
 const app = fastify({ logger, exposeHeadRoutes: true });
-const redisClient = new IORedis({
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT
+const TTL_SESSION = 1000 * 60 * 60 * 24 * 7; // 1 week
+const ddb = new dynamoose.aws.sdk.DynamoDB({
+  accessKeyId: 'AKID',
+  secretAccessKey: 'SECRET',
+  region: 'us-east-2',
+  endpoint: 'http://localhost:8000'
 });
-const prisma = new PrismaClient();
+
+// Set DynamoDB instance to the Dynamoose DDB instance
+dynamoose.aws.ddb.set(ddb);
+
+const dynamooseModels = models(TTL_SESSION);
+
 const abache = AbCache({
   useAwait: false,
-  driver: {
-    name: 'abstract-cache-redis',
-    options: { client: redisClient }
-  }
+  client: dynamoCache({ model: dynamooseModels.sessions })
 });
-app.decorate('prisma', prisma);
-
+app.decorate('dynamoose', dynamoose);
+app.decorate('dynamooseModels', dynamooseModels);
 app
   .register(fastifyEnv, {
     schema: {
       type: 'object',
-      required: [
-        'DISCORD_CLIENT_ID',
-        'DISCORD_SECRET',
-        'DATABASE_URL',
-        'GIT_REVISION',
-        'COOKIE_KEY',
-        'REDIS_HOST',
-        'REDIS_PORT',
-        'REDIRECT_LOGIN_URL'
-      ],
+      required: ['DISCORD_CLIENT_ID', 'DISCORD_SECRET', 'GIT_REVISION', 'COOKIE_KEY', 'REDIRECT_LOGIN_URL'],
       properties: {
         COOKIE_KEY: { type: 'string' },
         GIT_REVISION: { type: 'string' },
-        DATABASE_URL: { type: 'string' },
         BASE_URL: { type: 'string' },
         DISCORD_CLIENT_ID: { type: 'string' },
         DISCORD_SECRET: { type: 'string' },
@@ -69,10 +67,11 @@ app
   .register(fastifySession, {
     sessionCookieName: 'KA-SESSION',
     secretKey: process.env.COOKIE_KEY,
-    sessionMaxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-    cookie: { path: '/', httpOnly: true, sameSite: 'None', secure: true }
+    sessionMaxAge: TTL_SESSION,
+    cookie: { path: '/', httpOnly: true }
+    // cookie: { path: '/', httpOnly: true, sameSite: 'None', secure: true }
   })
-  .register(fastifyCORS, { origin: true, methods: 'GET,POST', credentials: true });
+  .register(fastifyCORS, { origin: true, methods: 'GET,POST,DELETE', credentials: true });
 
 // Non authenticated routes
 app.register(authRoute, { prefix: 'auth' });
@@ -91,7 +90,12 @@ export default app;
 
 declare module 'fastify' {
   interface FastifyInstance {
-    prisma: PrismaClient;
+    dynamoDb: any;
+    dynamooseModels: {
+      users: any;
+      wishlists: any;
+      sessions: any;
+    };
     discordOAuth2: OAuth2Namespace;
     config: {
       GIT_REVISION: string;

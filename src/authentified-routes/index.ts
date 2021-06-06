@@ -15,9 +15,5 @@ export default function authenticatedRoutes(fastify: FastifyInstance, opts, next
 
   fastify.register(ws, { prefix: '/ws' });
 
-  fastify.get('/logged', async function (req: FastifyRequest, reply: FastifyReply) {
-    return reply.send({ ye: 'works' });
-  });
-
   next();
 }

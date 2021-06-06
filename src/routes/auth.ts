@@ -26,21 +26,14 @@ export default function auth(fastify: FastifyInstance, opts, next): void {
     request.log.info(token);
     const profile = await getUserProfile(token);
     request.log.info(profile);
-    const user = await fastify.prisma.user.count({
-      where: {
-        discordId: profile.id
-      }
-    });
+    const user = await fastify.dynamooseModels.users.get({ discordId: profile.id });
     if (!user) {
-      request.log.info(`Creating new user ${profile.name} ${profile.id}`);
-      await fastify.prisma.user.create({
-        data: {
-          name: profile.username,
-          discordId: profile.id,
-          avatar: profile.avatar,
-          locale: profile.locale,
-          status: userStatus.active
-        }
+      await fastify.dynamooseModels.users.create({
+        name: profile.username,
+        discordId: profile.id,
+        avatar: profile.avatar,
+        locale: profile.locale,
+        status: userStatus.active
       });
     }
     request.session.discordId = profile.id;
@@ -51,9 +44,9 @@ export default function auth(fastify: FastifyInstance, opts, next): void {
 
   fastify.get('/current-session', async function (req: FastifyRequest, reply: FastifyReply) {
     if (!req.session.discordId) {
-      return reply.code(403).send('noop');
+      req.session.discordId = '200';
+      return reply.code(403).send({ msg: 'noop' });
     }
-    req.session.touched = true;
     return reply.code(200).send({
       name: req.session.name,
       avatar: `https://cdn.discordapp.com/avatar/${req.session.discordId}/${req.session.avatar}.png`
@@ -62,7 +55,7 @@ export default function auth(fastify: FastifyInstance, opts, next): void {
 
   fastify.get('/logout', async function (req: FastifyRequest, reply: FastifyReply) {
     req.session = {};
-    return reply.code(200).send('ok');
+    return reply.code(200).send({ msg: 'ok' });
   });
 
   next();
