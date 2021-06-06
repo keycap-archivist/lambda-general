@@ -56,8 +56,7 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
         id: uuidv4(),
         discordId: req.session.discordId,
         name: req.body.name,
-        content: req.body.wishlist,
-        lastUpdate: new Date().getUTCDate()
+        content: req.body.wishlist
       });
       return reply.send({ msg: 'OK' });
     }
