@@ -54,7 +54,7 @@ const abache = AbCache({
   client: dynamoCache({ model: dynamooseModels.sessions })
 });
 app.decorate('dynamoose', dynamoose);
-app.decorate('GIT_REV', dynamoose);
+app.decorate('GIT_REV', GIT_REV);
 app.decorate('dynamooseModels', dynamooseModels);
 app
   .register(fastifyEnv, {
