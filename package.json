@@ -14,7 +14,6 @@
     "watch:inspect": "nodemon --inspect -e ts -w ./src -x node -r ts-node/register src/app.ts",
     "build": "npx tsc --incremental",
     "clean": "rm -rf dist package",
-    "package": "npx ncc build src/lambda.ts -o package/ -s -m",
     "db:admin": "export DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin"
   },
   "dependencies": {
@@ -36,8 +35,8 @@
     "@types/node": "14.14.41",
     "@typescript-eslint/eslint-plugin": "4.22.0",
     "@typescript-eslint/parser": "4.22.0",
-    "@vercel/ncc": "0.28.6",
     "dotenv": "9.0.2",
+    "dynamodb-admin": "4.0.1",
     "eslint": "7.24.0",
     "eslint-config-prettier": "8.2.0",
     "eslint-plugin-prettier": "3.4.0",
