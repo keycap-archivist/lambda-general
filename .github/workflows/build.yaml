@@ -44,6 +44,14 @@ jobs:
           aws-region: us-east-2
       - name: Send to S3
         run: |
-          aws s3 cp ./package.zip s3://lambda-builds.keycap-archivist.com/ka-general-build.zip --storage-class REDUCED_REDUNDANCY --acl private --no-progress
+          aws s3 cp ./package.zip s3://lambda-builds.keycap-archivist.com/ka-general-build.zip \
+            --storage-class REDUCED_REDUNDANCY \
+            --acl private \
+            --no-progress
       - name: Deploy Lambda function
-        run: aws lambda publish-version --function-name ka_general
+        run: |
+          aws lambda update-function-code \
+            --function-name ka_general \
+            --s3-bucket lambda-builds.keycap-archivist.com \
+            --s3-key ka-general-build.zip \
+            --publish
