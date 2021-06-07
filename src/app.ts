@@ -60,7 +60,7 @@ app
   .register(fastifyEnv, {
     schema: {
       type: 'object',
-      required: ['DISCORD_CLIENT_ID', 'DISCORD_SECRET', 'GIT_REVISION', 'COOKIE_KEY', 'REDIRECT_LOGIN_URL'],
+      required: ['DISCORD_CLIENT_ID', 'DISCORD_SECRET', 'COOKIE_KEY', 'REDIRECT_LOGIN_URL'],
       properties: {
         COOKIE_KEY: { type: 'string' },
         BASE_URL: { type: 'string' },
@@ -82,7 +82,7 @@ app
     cookie: { expires: TTL_SESSION, path: '/', httpOnly: true, sameSite: 'None', secure: true }
   })
   .register(fastifyCORS, {
-    origin: ['https://api.keycap-archivist.com', 'http://localhost:8000'],
+    origin: ['https://keycap-archivist.com', 'http://localhost:8000'],
     methods: 'GET,POST,DELETE',
     credentials: true
   });

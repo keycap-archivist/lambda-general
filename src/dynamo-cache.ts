@@ -26,7 +26,11 @@ class DynamoCache {
     return !!r;
   }
   async set(key: string, value: Record<string, unknown>, ttl: number) {
-    await this.model.update({ key }, { data: { ...value }, ttl: new Date(Date.now() + ttl) });
+    if (!Object.keys(value).length) {
+      await this.model.delete({ key });
+    } else {
+      await this.model.update({ key }, { data: { ...value }, ttl: new Date(Date.now() + ttl) });
+    }
   }
 }
 
