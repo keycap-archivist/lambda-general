@@ -23,9 +23,9 @@ import type { OAuth2Namespace } from 'fastify-oauth2';
 
 let GIT_REV: string;
 if (process.env.NODE_ENV !== 'production') {
-  GIT_REV = readFileSync(join(__dirname, 'revision.txt'), 'utf-8');
-} else {
   GIT_REV = 'dev';
+} else {
+  GIT_REV = readFileSync(join(__dirname, 'revision.txt'), 'utf-8');
 }
 
 const logger = pino().child({ revision: GIT_REV });
