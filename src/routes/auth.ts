@@ -44,6 +44,7 @@ export default function auth(fastify: FastifyInstance, opts, next): void {
 
   fastify.get('/current-session', async function (req: FastifyRequest, reply: FastifyReply) {
     if (!req.session.discordId) {
+      req.session = {};
       return reply.code(403).send({ msg: 'noop' });
     }
     return reply.code(200).send({

@@ -65,17 +65,19 @@ app
   })
   .register(fastifyCookie)
   .register(fastifyCaching, {
-    expiresIn: 50,
-    cache: abache,
-    cacheSegment: 'fastifyCache'
+    cache: abache
   })
   .register(fastifySession, {
     sessionCookieName: 'KA-SESSION',
     secretKey: process.env.COOKIE_KEY,
     sessionMaxAge: TTL_SESSION,
-    cookie: { path: '/', httpOnly: true, sameSite: 'None', secure: true }
+    cookie: { expires: TTL_SESSION, path: '/', httpOnly: true, sameSite: 'None', secure: true }
   })
-  .register(fastifyCORS, { origin: true, methods: 'GET,POST,DELETE', credentials: true });
+  .register(fastifyCORS, {
+    origin: ['https://api.keycap-archivist.com', 'http://localhost:8000'],
+    methods: 'GET,POST,DELETE',
+    credentials: true
+  });
 
 // Non authenticated routes
 app.register(authRoute, { prefix: 'auth' });
