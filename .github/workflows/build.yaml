@@ -30,6 +30,7 @@ jobs:
         run: |
           yarn build
           cp package.json dist/package.json
+          echo "${{ github.sha }}" > dist/revision.txt
           cd dist
           yarn --production
       - name: zip

@@ -1,3 +1,5 @@
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import fastify from 'fastify';
 import fastifyCORS from 'fastify-cors';
 import fastifyEnv from 'fastify-env';
@@ -19,7 +21,13 @@ import authenticatedRoutes from './authentified-routes/index';
 
 import type { OAuth2Namespace } from 'fastify-oauth2';
 
-const GIT_REV = process.env.GIT_REVISION;
+let GIT_REV: string;
+if (process.env.NODE_ENV !== 'production') {
+  GIT_REV = readFileSync(join(__dirname, 'revision.txt'), 'utf-8');
+} else {
+  GIT_REV = 'dev';
+}
+
 const logger = pino().child({ revision: GIT_REV });
 const app = fastify({ logger, exposeHeadRoutes: true });
 const TTL_SESSION = 1000 * 60 * 60 * 24 * 7; // 1 week
@@ -46,6 +54,7 @@ const abache = AbCache({
   client: dynamoCache({ model: dynamooseModels.sessions })
 });
 app.decorate('dynamoose', dynamoose);
+app.decorate('GIT_REV', dynamoose);
 app.decorate('dynamooseModels', dynamooseModels);
 app
   .register(fastifyEnv, {
@@ -54,7 +63,6 @@ app
       required: ['DISCORD_CLIENT_ID', 'DISCORD_SECRET', 'GIT_REVISION', 'COOKIE_KEY', 'REDIRECT_LOGIN_URL'],
       properties: {
         COOKIE_KEY: { type: 'string' },
-        GIT_REVISION: { type: 'string' },
         BASE_URL: { type: 'string' },
         DISCORD_CLIENT_ID: { type: 'string' },
         DISCORD_SECRET: { type: 'string' },
@@ -96,7 +104,7 @@ export default app;
 
 declare module 'fastify' {
   interface FastifyInstance {
-    dynamoDb: any;
+    GIT_REV: string;
     dynamooseModels: {
       users: any;
       wishlists: any;
