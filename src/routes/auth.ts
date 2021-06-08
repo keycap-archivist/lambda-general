@@ -42,23 +42,41 @@ export default function auth(fastify: FastifyInstance, opts, next): void {
     return reply.redirect(fastify.config.REDIRECT_LOGIN_URL);
   });
 
-  fastify.get('/current-session', async function (req: FastifyRequest, reply: FastifyReply) {
-    req.log.info(`cookies: ${JSON.stringify(req.cookies)}`);
-    req.log.info({ ...req.headers });
-    if (!req.session.discordId) {
-      req.session = {};
-      return reply.code(403).send({ msg: 'noop' });
+  fastify.get(
+    '/current-session',
+    {
+      schema: {
+        description: 'get status of the current session',
+        tags: ['authenticated']
+      }
+    },
+    async function (req: FastifyRequest, reply: FastifyReply) {
+      req.log.info(`cookies: ${JSON.stringify(req.cookies)}`);
+      req.log.info({ ...req.headers });
+      if (!req.session.discordId) {
+        req.session = {};
+        return reply.code(403).send({ msg: 'noop' });
+      }
+      return reply.code(200).send({
+        name: req.session.name,
+        avatar: `https://cdn.discordapp.com/avatars/${req.session.discordId}/${req.session.avatar}.png`
+      });
     }
-    return reply.code(200).send({
-      name: req.session.name,
-      avatar: `https://cdn.discordapp.com/avatars/${req.session.discordId}/${req.session.avatar}.png`
-    });
-  });
+  );
 
-  fastify.get('/logout', async function (req: FastifyRequest, reply: FastifyReply) {
-    req.session = {};
-    return reply.code(200).send({ msg: 'ok' });
-  });
+  fastify.get(
+    '/logout',
+    {
+      schema: {
+        description: 'logout the current session',
+        tags: ['authenticated']
+      }
+    },
+    async function (req: FastifyRequest, reply: FastifyReply) {
+      req.session = {};
+      return reply.code(200).send({ msg: 'ok' });
+    }
+  );
 
   next();
 }

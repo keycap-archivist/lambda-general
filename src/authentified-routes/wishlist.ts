@@ -3,16 +3,28 @@ import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 
 export default function wishlist(fastify: FastifyInstance, opts, next): void {
   // get users wishlist
-  fastify.get('/', async function (req: FastifyRequest, reply: FastifyReply) {
-    const ws = await fastify.dynamooseModels.wishlists.scan({ discordId: { eq: `${req.session.discordId}` } }).exec();
-    return reply.send(ws);
-  });
+  fastify.get(
+    '/',
+    {
+      schema: {
+        description: 'Get all the wishlists',
+        tags: ['authenticated']
+      }
+    },
+    async function (req: FastifyRequest, reply: FastifyReply) {
+      const ws = await fastify.dynamooseModels.wishlists.scan({ discordId: { eq: `${req.session.discordId}` } }).exec();
+      return reply.send(ws);
+    }
+  );
 
   fastify.route({
     method: 'GET',
     url: '/:id',
     schema: {
+      description: 'Get a wishlist',
+      tags: ['authenticated'],
       params: {
+        type: 'object',
         required: ['id'],
         properties: {
           id: { type: 'string' }
@@ -32,6 +44,8 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
     url: '/',
     method: 'POST',
     schema: {
+      description: 'Create a new wishlist',
+      tags: ['authenticated'],
       body: {
         type: 'object',
         required: ['name', 'wishlist'],
@@ -67,7 +81,10 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
     url: '/:id',
     method: 'POST',
     schema: {
+      description: 'Update a wishlist',
+      tags: ['authenticated'],
       params: {
+        type: 'object',
         required: ['id'],
         properties: {
           id: { type: 'number' }
@@ -113,7 +130,10 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
     url: '/:id',
     method: 'DELETE',
     schema: {
+      description: 'Delete a wishlist',
+      tags: ['authenticated'],
       params: {
+        type: 'object',
         required: ['id'],
         properties: {
           id: { type: 'number' }

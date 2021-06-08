@@ -6,6 +6,7 @@ import fastifyEnv from 'fastify-env';
 import fastifyCaching from 'fastify-caching';
 import fastifySession from 'fastify-server-session';
 import fastifyCookie from 'fastify-cookie';
+import fastifySwagger from 'fastify-swagger';
 import pino from 'pino';
 // import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import AbCache from 'abstract-cache';
@@ -29,7 +30,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const logger = pino().child({ revision: GIT_REV });
-const app = fastify({ logger, exposeHeadRoutes: true });
+const app = fastify({ logger, exposeHeadRoutes: false });
 const TTL_SESSION = 1000 * 60 * 60 * 24 * 7; // 1 week
 
 let ddb;
@@ -71,6 +72,7 @@ app
     },
     dotenv: true
   })
+
   .register(fastifyCookie)
   .register(fastifyCaching, {
     cache: abache
@@ -86,6 +88,26 @@ app
     methods: 'GET,POST,DELETE',
     credentials: true
   });
+
+//@ts-ignore
+app.register(fastifySwagger, {
+  mode: 'dynamic',
+  exposeRoute: true,
+  // hideUntagged: true,
+  uiConfig: {},
+  routePrefix: '/doc',
+  swagger: {
+    info: {
+      title: 'Test swagger',
+      description: 'testing the fastify swagger api',
+      version: '0.1.0'
+    },
+    host: 'api.keycap-archivist.com',
+    schemes: ['https'],
+    consumes: ['application/json'],
+    produces: ['application/json']
+  }
+});
 
 // Non authenticated routes
 app.register(authRoute, { prefix: 'auth' });
