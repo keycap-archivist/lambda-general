@@ -576,10 +576,10 @@ avvio@^7.1.2:
     fastq "^1.6.1"
     queue-microtask "^1.1.2"
 
-aws-lambda-fastify@1.4.4:
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/aws-lambda-fastify/-/aws-lambda-fastify-1.4.4.tgz#4ee8c823f9c271ff9944be4d8639d3ba1d87dda6"
-  integrity sha512-o8BuMHFIHStKUSzp3vwmAjvl3ftjnv4E6SY3f0Sy0jJwH/G81QzfUB3NakSPlnmDZ3CYr2lRvek2+LROT4vtRg==
+aws-lambda-fastify@1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/aws-lambda-fastify/-/aws-lambda-fastify-1.5.0.tgz#381ccb2212f93221959e93fca1df588f4a434dc0"
+  integrity sha512-hA53z+9eZingRQ5cB0LhWNa7RdJVPIZb98YLMTB2Fa0MMLa6D0qsWSh6iRaWoi95rum430zhXAYIamn2Dy1f2w==
 
 aws-sdk@^2.792.0, aws-sdk@^2.851.0:
   version "2.922.0"
@@ -1151,7 +1151,7 @@ duplexer3@^0.1.4:
   resolved "https://registry.yarnpkg.com/duplexer3/-/duplexer3-0.1.4.tgz#ee01dd1cac0ed3cbc7fdbea37dc0a8f1ce002ce2"
   integrity sha1-7gHdHKwO08vH/b6jfcCo8c4ALOI=
 
-dynamodb-admin@^4.0.1:
+dynamodb-admin@4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/dynamodb-admin/-/dynamodb-admin-4.0.1.tgz#bb795a3f08d6d4bf278772eedf431f2dda9c5aec"
   integrity sha512-d4WXG7cg82B+Hd9o6mZyfDEmfmPjL6AYurdH3Unl47xG/mD1xO9HuX/Tf6eQmUlb8nR7+kUvmfNhAeXoyRa5dw==

@@ -51,7 +51,7 @@ export default function auth(fastify: FastifyInstance, opts, next): void {
     }
     return reply.code(200).send({
       name: req.session.name,
-      avatar: `https://cdn.discordapp.com/avatar/${req.session.discordId}/${req.session.avatar}.png`
+      avatar: `https://cdn.discordapp.com/avatars/${req.session.discordId}/${req.session.avatar}.png`
     });
   });
 
