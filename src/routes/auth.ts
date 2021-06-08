@@ -43,8 +43,7 @@ export default function auth(fastify: FastifyInstance, opts, next): void {
   });
 
   fastify.get('/current-session', async function (req: FastifyRequest, reply: FastifyReply) {
-    const c = req.cookies['KA-SESSION'];
-    req.log.info(`cookie: ${c}`);
+    req.log.info(`cookies: ${JSON.stringify(req.cookies)}`);
     req.log.info({ ...req.headers });
     if (!req.session.discordId) {
       req.session = {};
