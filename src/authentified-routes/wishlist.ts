@@ -98,7 +98,7 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
       }
     },
     handler: async function (
-      req: FastifyRequest<{ Params: { id: string }; Body: { wishlist: any; name: string; id: string } }>,
+      req: FastifyRequest<{ Params: { id: string }; Body: { wishlist: any; name: string } }>,
       reply: FastifyReply
     ) {
       const s = await fastify.dynamooseModels.wishlists
@@ -111,7 +111,7 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
       }
       await fastify.dynamooseModels.wishlists.update({
         where: {
-          id: req.body.id
+          id: req.params.id
         },
         data: {
           name: req.body.name,
