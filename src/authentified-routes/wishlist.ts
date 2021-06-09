@@ -101,10 +101,7 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
       req: FastifyRequest<{ Params: { id: string }; Body: { wishlist: any; name: string } }>,
       reply: FastifyReply
     ) {
-      const s = await fastify.dynamooseModels.wishlists
-        .scan({ discordId: { eq: req.session.discordId }, id: { eq: req.params.id } })
-        .count()
-        .exec();
+      const s = await fastify.dynamooseModels.wishlists.get({ id: req.params.id, discordId: req.session.discordId });
 
       if (!s) {
         return reply.status(404).send({ msg: 'Wishlist not found' });
@@ -115,8 +112,7 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
         },
         data: {
           name: req.body.name,
-          content: req.body.wishlist,
-          lastUpdate: new Date().getUTCDate()
+          content: req.body.wishlist
         }
       });
       return reply.send({ msg: 'OK' });
@@ -139,10 +135,7 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
       }
     },
     handler: async function (req: FastifyRequest<{ Params: { id: number } }>, reply: FastifyReply) {
-      const s = await fastify.dynamooseModels.wishlists
-        .scan({ discordId: { eq: req.session.discordId }, id: { eq: req.params.id } })
-        .count()
-        .exec();
+      const s = await fastify.dynamooseModels.wishlists.get({ id: req.params.id, discordId: req.session.discordId });
       if (!s) {
         return reply.status(404).send({ msg: 'Wishlist not found' });
       }
