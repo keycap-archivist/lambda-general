@@ -19,7 +19,7 @@ export function models(ttl: number): { users: any; wishlists: any; sessions: any
     { waitForActive: { enabled: true } }
   );
   const wishlists = dynamoose.model(
-    'Wishslists',
+    'Wishlists',
     new dynamoose.Schema(
       {
         id: { type: String, hashKey: true },
