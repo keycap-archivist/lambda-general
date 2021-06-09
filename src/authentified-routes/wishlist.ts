@@ -31,7 +31,7 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
         }
       }
     },
-    handler: async function (req: FastifyRequest<{ Params: { id: number } }>, reply: FastifyReply) {
+    handler: async function (req: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
       const ws = await fastify.dynamooseModels.wishlists
         .scan({ id: { eq: `${req.params.id}` }, discordId: { eq: `${req.session.discordId}` } })
         .exec();
@@ -55,10 +55,7 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
         }
       }
     },
-    handler: async function (
-      req: FastifyRequest<{ Body: { wishlist: any; name: string; id: number } }>,
-      reply: FastifyReply
-    ) {
+    handler: async function (req: FastifyRequest<{ Body: { wishlist: any; name: string } }>, reply: FastifyReply) {
       const s = await fastify.dynamooseModels.wishlists
         .scan({ discordId: { eq: `${req.session.discordId}` } })
         .count()
@@ -88,7 +85,7 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
         type: 'object',
         required: ['id'],
         properties: {
-          id: { type: 'number' }
+          id: { type: 'string' }
         }
       },
       body: {
@@ -101,7 +98,7 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
       }
     },
     handler: async function (
-      req: FastifyRequest<{ Params: { id: number }; Body: { wishlist: any; name: string; id: number } }>,
+      req: FastifyRequest<{ Params: { id: string }; Body: { wishlist: any; name: string; id: string } }>,
       reply: FastifyReply
     ) {
       const s = await fastify.dynamooseModels.wishlists
