@@ -14,7 +14,8 @@
     "watch:inspect": "nodemon --inspect -e ts -w ./src -x node -r ts-node/register src/app.ts",
     "build": "npx tsc --incremental",
     "clean": "rm -rf dist package",
-    "db:admin": "export DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin"
+    "db:admin": "export DYNAMO_ENDPOINT=http://localhost:8500 dynamodb-admin",
+    "test": "jest"
   },
   "dependencies": {
     "abstract-cache": "1.0.1",
@@ -33,6 +34,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.23",
     "@types/node": "14.14.41",
     "@typescript-eslint/eslint-plugin": "4.22.0",
     "@typescript-eslint/parser": "4.22.0",
@@ -41,11 +43,13 @@
     "eslint": "7.24.0",
     "eslint-config-prettier": "8.2.0",
     "eslint-plugin-prettier": "3.4.0",
+    "jest": "27.0.4",
     "nodemon": "2.0.7",
     "npm-check-updates": "11.5.1",
     "pino-pretty": "5.0.1",
     "prettier": "2.2.1",
     "source-map-support": "0.5.19",
+    "ts-jest": "27.0.3",
     "typescript": "4.2.4"
   }
 }
