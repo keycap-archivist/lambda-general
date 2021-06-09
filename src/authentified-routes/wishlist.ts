@@ -66,13 +66,14 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
       if (s >= 10) {
         return reply.status(400).send({ msg: 'You cant have more than 10 wishlists' });
       }
+      const id = uuidv4();
       await fastify.dynamooseModels.wishlists.create({
-        id: uuidv4(),
+        id: id,
         discordId: req.session.discordId,
         name: req.body.name,
         content: req.body.wishlist
       });
-      return reply.send({ msg: 'OK' });
+      return reply.send({ id: id, msg: 'OK' });
     }
   });
 
