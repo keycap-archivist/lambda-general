@@ -1,4 +1,5 @@
 import ws from './wishlist';
+import profile from './profile';
 
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 
@@ -14,6 +15,7 @@ export default function authenticatedRoutes(fastify: FastifyInstance, opts, next
   });
 
   fastify.register(ws, { prefix: '/ws' });
+  fastify.register(profile, { prefix: '/profile' });
 
   next();
 }

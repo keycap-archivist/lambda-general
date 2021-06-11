@@ -10,9 +10,11 @@ export function models(ttl: number): { users: any; wishlists: any; sessions: any
         avatar: String,
         locale: String,
         status: String,
-        config: { type: Object }
+        config: { type: Object },
+        social: { type: Object }
       },
       {
+        saveUnknown: ['config.**', 'social.**'],
         timestamps: true
       }
     ),

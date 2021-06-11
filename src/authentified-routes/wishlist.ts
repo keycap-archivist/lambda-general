@@ -32,9 +32,13 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
       }
     },
     handler: async function (req: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
-      const ws = await fastify.dynamooseModels.wishlists
-        .scan({ id: { eq: `${req.params.id}` }, discordId: { eq: `${req.session.discordId}` } })
-        .exec();
+      const ws = await fastify.dynamooseModels.wishlists.get({
+        id: `${req.params.id}`,
+        discordId: `${req.session.discordId}`
+      });
+      if (!ws) {
+        return reply.status(404).send({ msg: 'Wishlist not found' });
+      }
       return reply.send(ws);
     }
   });
