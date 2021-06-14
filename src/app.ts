@@ -8,7 +8,6 @@ import fastifySession from 'fastify-server-session';
 import fastifyCookie from 'fastify-cookie';
 import fastifySwagger from 'fastify-swagger';
 import pino from 'pino';
-// import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import AbCache from 'abstract-cache';
 import * as dynamoose from 'dynamoose';
 

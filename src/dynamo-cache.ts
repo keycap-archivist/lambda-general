@@ -1,5 +1,3 @@
-// import type { ModelType, AnyDocument } from 'dynamoose';
-
 class DynamoCache {
   await = true;
   model: any;
