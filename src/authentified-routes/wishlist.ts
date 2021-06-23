@@ -135,7 +135,7 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
         type: 'object',
         required: ['id'],
         properties: {
-          id: { type: 'number' }
+          id: { type: 'string' }
         }
       }
     },
