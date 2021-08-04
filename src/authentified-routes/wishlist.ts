@@ -126,8 +126,8 @@ export default function wishlist(fastify: FastifyInstance, opts, next): void {
 
   // delete a wishlist
   fastify.route({
-    url: '/:id',
-    method: 'DELETE',
+    url: '/delete/:id',
+    method: 'GET',
     schema: {
       description: 'Delete a wishlist',
       tags: ['authenticated'],
