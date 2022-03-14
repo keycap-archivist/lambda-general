@@ -8,3 +8,4 @@ submission-cache
 .env
 secret-key
 package
+.nyc_output
