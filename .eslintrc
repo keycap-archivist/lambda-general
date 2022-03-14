@@ -6,7 +6,6 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/no-non-null-assertion": "error",
     "@typescript-eslint/ban-ts-comment": "off"
   },

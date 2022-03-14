@@ -1,6 +1,6 @@
-import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import type { FastifyInstance, FastifyRequest, FastifyReply, RegisterOptions } from 'fastify';
 
-export default function misc(fastify: FastifyInstance, opts, next): void {
+export default function misc(fastify: FastifyInstance, opts: RegisterOptions, next: (err?: Error) => void): void {
   fastify.get(
     '/info',
     {

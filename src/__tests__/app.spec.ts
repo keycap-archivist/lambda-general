@@ -38,32 +38,37 @@ describe('App', () => {
     });
     test('/ws POST Update Get', async () => {
       const c = await app.inject({ method: 'GET', url: '/__SETSESSION' });
-      const r = await app.inject({
-        method: 'POST',
-        url: '/ws',
-        headers: {
-          cookie: c.headers['set-cookie']
-        },
-        //@ts-ignore
-        body: {
-          name: 'foobar',
-          wishlist: { nested: { property: 'inside' } }
-        }
-      });
+      const r = await app
+        .inject({
+          method: 'POST',
+          url: '/ws',
+          headers: {
+            cookie: c.headers['set-cookie']
+          },
+          //@ts-ignore
+          body: {
+            name: 'foobar',
+            wishlist: { nested: { property: 'inside' } }
+          }
+        })
+        .end();
+
       expect(r.statusCode).toBe(200);
       const updatedWishlist = {
         name: 'foobar',
         wishlist: { NOP: { dd: 'foo' } }
       };
-      const r2 = await app.inject({
-        method: 'POST',
-        url: `/ws/${JSON.parse(r.body).id}`,
-        headers: {
-          cookie: c.headers['set-cookie']
-        },
-        //@ts-ignore
-        body: updatedWishlist
-      });
+      const r2 = await app
+        .inject({
+          method: 'POST',
+          url: `/ws/${JSON.parse(r.body).id}`,
+          headers: {
+            cookie: c.headers['set-cookie']
+          },
+          //@ts-ignore
+          body: updatedWishlist
+        })
+        .end();
       expect(r2.statusCode).toBe(200);
       const r3 = await app.inject({
         method: 'GET',

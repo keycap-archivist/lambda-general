@@ -3,10 +3,10 @@ import got from 'got';
 
 import { userStatus } from '../internal/enums';
 
-import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import type { FastifyInstance, FastifyRequest, FastifyReply, RegisterOptions } from 'fastify';
 import type { OAuth2Token } from 'fastify-oauth2';
 
-export default function auth(fastify: FastifyInstance, opts, next): void {
+export default function auth(fastify: FastifyInstance, opts: RegisterOptions, next: (err?: Error) => void): void {
   fastify.register(oauth2, {
     name: 'discordOAuth2',
     credentials: {
