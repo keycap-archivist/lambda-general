@@ -15,7 +15,8 @@
     "build": "npx tsc --incremental",
     "clean": "rm -rf dist package",
     "db:admin": "cross-env DYNAMO_ENDPOINT=http://localhost:8500 dynamodb-admin",
-    "test": "jest"
+    "test": "env $(cat .env.test) npx tap -J --ts src/**/*.test.ts src/*.test.ts",
+    "test:ci": "npm run test -- --cov --coverage-report=lcovonly"
   },
   "dependencies": {
     "abstract-cache": "1.0.1",
@@ -34,8 +35,8 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.24",
     "@types/node": "16.4.11",
+    "@types/tap": "15.0.6",
     "@typescript-eslint/eslint-plugin": "5.14.0",
     "@typescript-eslint/parser": "5.14.0",
     "cross-env": "7.0.3",
@@ -44,12 +45,15 @@
     "eslint": "8.11.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.0.0",
-    "jest": "27.0.6",
     "nodemon": "2.0.15",
     "pino-pretty": "7.5.3",
     "prettier": "2.5.1",
     "source-map-support": "0.5.21",
-    "ts-jest": "27.0.4",
+    "tap": "16.0.0",
+    "ts-node": "10.7.0",
     "typescript": "4.6.2"
+  },
+  "tap": {
+    "check-coverage": false
   }
 }
