@@ -33,7 +33,7 @@ jobs:
           pushd .
           cd dev/docker-stack && docker-compose up -d
           popd
-          yarn test
+          yarn test:ci
       - name: build
         run: |
           yarn build
