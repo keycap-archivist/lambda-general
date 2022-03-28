@@ -31,7 +31,7 @@
     "fastify-server-session": "5.0.1",
     "fastify-swagger": "5.0.0",
     "got": "11.8.3",
-    "pino": "7.9.1",
+    "pino": "7.9.2",
     "uuid": "8.3.2"
   },
   "devDependencies": {
@@ -42,7 +42,7 @@
     "cross-env": "7.0.3",
     "dotenv": "16.0.0",
     "dynamodb-admin": "4.1.0",
-    "eslint": "8.11.0",
+    "eslint": "8.12.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.0.0",
     "nodemon": "2.0.15",
