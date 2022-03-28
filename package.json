@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "abstract-cache": "1.0.1",
-    "aws-lambda-fastify": "2.1.1",
+    "aws-lambda-fastify": "2.1.2",
     "dynamoose": "2.8.5",
     "fastify": "3.27.4",
     "fastify-caching": "6.2.0",
