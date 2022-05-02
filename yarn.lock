@@ -1041,22 +1041,7 @@ aws-lambda-fastify@2.1.2:
   resolved "https://registry.yarnpkg.com/aws-lambda-fastify/-/aws-lambda-fastify-2.1.2.tgz#b42bd7cb36a8b79511359e534b0e745286c0abd6"
   integrity sha512-ngvuS3R8YI1yyE2OMZwAQKsZRlLaT0JqUyVVEYOmSHY+N/TxZCicW8KMuGL4XavWHjOsH7ZqQOgjbdDZH7CqEg==
 
-aws-sdk@^2.851.0:
-  version "2.960.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.960.0.tgz#7f5fba5de9b284c0d7e77c11ae7e64a4bf085de7"
-  integrity sha512-e3KNZ5x0uzBNbVLbGUO2xrMRonUPpmXxgyZ/MaHx5yOQIv9G2a7dei/TvrMa9rl4MFCScGLw1LjbYb7CrdbMBQ==
-  dependencies:
-    buffer "4.9.2"
-    events "1.1.1"
-    ieee754 "1.1.13"
-    jmespath "0.15.0"
-    querystring "0.2.0"
-    sax "1.2.1"
-    url "0.10.3"
-    uuid "3.3.2"
-    xml2js "0.4.19"
-
-aws-sdk@^2.968.0:
+aws-sdk@^2.851.0, aws-sdk@^2.968.0:
   version "2.1092.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1092.0.tgz#79452dee35ab35b8c1de63340a0bd697fa8db3e8"
   integrity sha512-8PH2rOgZazGT3VfGPkKcvzz2K9ylVfDniJH4WfJXHEBGxu0+XEMDbjuYpe8k/L1C7w0UTP6CuChjqCxgJznrxg==
@@ -1694,10 +1679,10 @@ duplexify@^4.1.2:
     readable-stream "^3.1.1"
     stream-shift "^1.0.0"
 
-dynamodb-admin@4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/dynamodb-admin/-/dynamodb-admin-4.1.0.tgz#e6f3e264808091ba64b2d7ddfc45c6a9458d4bd9"
-  integrity sha512-ffcr/UA3HdBO5oJDA5A2dzipzjfyd17S3i+tKkl4EBVhVNsvEysb/Iz0lha+PUJ38cLiS+rYUC3W6lYXdUxrEA==
+dynamodb-admin@4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/dynamodb-admin/-/dynamodb-admin-4.4.0.tgz#9d987f2ad1a32a245cfa94aa7684e1507f6ce5b4"
+  integrity sha512-j2HZUJFVwKvlv7SY1CxYCKVB/9BQ4yOH/r4QDaDKSQy/97vTSK+Cc6XYR2VHqJUXT6eH0UWRxexcC+tsV2WjtQ==
   dependencies:
     argparse "^2.0.1"
     aws-sdk "^2.851.0"
@@ -2877,11 +2862,6 @@ jake@^10.6.1:
     chalk "^2.4.2"
     filelist "^1.0.1"
     minimatch "^3.0.4"
-
-jmespath@0.15.0:
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/jmespath/-/jmespath-0.15.0.tgz#a3f222a9aae9f966f5d27c796510e28091764217"
-  integrity sha1-o/Iiqarp+Wb10nx5ZRDigJF2Qhc=
 
 jmespath@0.16.0:
   version "0.16.0"
