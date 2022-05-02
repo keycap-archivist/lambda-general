@@ -24,7 +24,7 @@
     "dynamoose": "2.8.5",
     "fastify": "3.29.0",
     "fastify-caching": "6.3.0",
-    "fastify-cookie": "5.6.0",
+    "fastify-cookie": "5.7.0",
     "fastify-cors": "6.1.0",
     "fastify-env": "2.2.0",
     "fastify-oauth2": "4.5.0",
