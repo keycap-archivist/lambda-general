@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - id: nodeversion
-        run: echo ::set-output name=NODE::$(cat .nvmrc)
+        run: echo "NODE=$(cat .nvmrc)"
       - name: restore Cache
         uses: actions/cache@master
         with:

@@ -34,14 +34,14 @@ const TTL_SESSION = 1000 * 60 * 60 * 24 * 7; // 1 week
 
 let ddb;
 if (process.env.NODE_ENV !== 'production') {
-  ddb = new dynamoose.aws.sdk.DynamoDB({
+  ddb = new dynamoose.aws.ddb.DynamoDB({
     accessKeyId: 'AKID',
     secretAccessKey: 'SECRET',
     region: 'us-east-2',
     endpoint: 'http://localhost:8500'
   });
 } else {
-  ddb = new dynamoose.aws.sdk.DynamoDB();
+  ddb = new dynamoose.aws.ddb.DynamoDB();
 }
 
 // Set DynamoDB instance to the Dynamoose DDB instance
