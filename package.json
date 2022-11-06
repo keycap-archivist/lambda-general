@@ -27,7 +27,7 @@
     "@fastify/oauth2": "^6.1.0",
     "@fastify/swagger": "^8.1.0",
     "abstract-cache": "1.0.1",
-    "dynamoose": "2.8.8",
+    "dynamoose": "2.8.5",
     "fastify": "4.9.2",
     "fastify-server-session": "5.0.1",
     "got": "11.8.3",
