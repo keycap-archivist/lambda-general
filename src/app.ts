@@ -1,12 +1,12 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import fastify from 'fastify';
-import fastifyCORS from 'fastify-cors';
-import fastifyEnv from 'fastify-env';
-import fastifyCaching from 'fastify-caching';
+import fastifyCORS from '@fastify/cors';
+import fastifyEnv from '@fastify/env';
+import fastifyCaching from '@fastify/caching';
 import fastifySession from 'fastify-server-session';
-import fastifyCookie from 'fastify-cookie';
-import fastifySwagger from 'fastify-swagger';
+import fastifyCookie from '@fastify/cookie';
+import fastifySwagger from '@fastify/swagger';
 import pino from 'pino';
 import AbCache from 'abstract-cache';
 import * as dynamoose from 'dynamoose';
@@ -19,7 +19,7 @@ import authRoute from './routes/auth';
 import miscRoutes from './routes/misc';
 import authenticatedRoutes from './authentified-routes/index';
 
-import type { OAuth2Namespace } from 'fastify-oauth2';
+import type { OAuth2Namespace } from '@fastify/oauth2';
 
 let GIT_REV: string;
 if (process.env.NODE_ENV !== 'production') {
@@ -90,9 +90,6 @@ app
 
 app.register(fastifySwagger, {
   mode: 'dynamic',
-  exposeRoute: true,
-  uiConfig: {},
-  routePrefix: '/doc',
   swagger: {
     info: {
       title: 'Keycap Archivist general API',

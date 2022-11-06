@@ -1,10 +1,10 @@
-import oauth2 from 'fastify-oauth2';
+import oauth2 from '@fastify/oauth2';
 import got from 'got';
 
 import { userStatus } from '../internal/enums';
 
 import type { FastifyInstance, FastifyRequest, FastifyReply, RegisterOptions } from 'fastify';
-import type { OAuth2Token } from 'fastify-oauth2';
+import type { OAuth2Token } from '@fastify/oauth2';
 
 export default function auth(fastify: FastifyInstance, opts: RegisterOptions, next: (err?: Error) => void): void {
   fastify.register(oauth2, {
@@ -85,7 +85,7 @@ async function getUserProfile(token: OAuth2Token): Promise<any> {
   const { body } = await got.get('https://discord.com/api/users/@me', {
     responseType: 'json',
     headers: {
-      authorization: `${token.token_type} ${token.access_token}`
+      authorization: `${token.token.token_type} ${token.token.access_token}`
     }
   });
   return body;
