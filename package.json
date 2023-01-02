@@ -22,7 +22,7 @@
     "abstract-cache": "1.0.1",
     "aws-lambda-fastify": "2.1.2",
     "dynamoose": "2.8.5",
-    "fastify": "3.29.0",
+    "fastify": "4.11.0",
     "fastify-caching": "6.3.0",
     "fastify-cookie": "5.6.0",
     "fastify-cors": "6.1.0",
